@@ -1,0 +1,278 @@
+
+{
+  "info": {
+    "_postman_id": "7d31e7c0-5c2f-4c7b-9d10-1c3a5b7e9f20",
+    "name": "ServeRest CRUD - Usuários",
+    "description": "Automação de testes de API da ServeRest com Postman. Contém os cenários CT01 a CT08 para cadastro, consulta, atualização e exclusão de usuários. O CT01 é validado junto ao CT02.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "CT02 - Cadastrar usuário",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"{{nomeUsuario}}\",\n  \"email\": \"{{emailUsuario}}\",\n  \"password\": \"{{senhaUsuario}}\",\n  \"administrador\": \"false\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/usuarios",
+          "host": ["{{baseUrl}}"],
+          "path": ["usuarios"]
+        },
+        "description": "CT01: valida o status HTTP e CT02: cadastra um usuário e armazena o ID retornado."
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const email = `qa.postman.${Date.now()}@example.com`;",
+              "pm.environment.set('emailUsuario', email);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('CT01 - Status HTTP 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('CT02 - Mensagem de cadastro e ID retornado', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.message).to.eql('Cadastro realizado com sucesso');",
+              "    pm.expect(body._id).to.be.a('string').and.not.empty;",
+              "    pm.environment.set('usuarioId', body._id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "CT03 - Consultar usuários",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/usuarios",
+          "host": ["{{baseUrl}}"],
+          "path": ["usuarios"]
+        },
+        "description": "Consulta a lista de usuários cadastrados."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('CT03 - Status HTTP 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('CT03 - Lista de usuários retornada', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.quantidade).to.be.a('number');",
+              "    pm.expect(body.usuarios).to.be.an('array');",
+              "});"
+            ]
+          }
+         }
+      ],
+      "response": []
+    },
+    {
+      "name": "CT04 - Consultar usuário cadastrado",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/usuarios/{{usuarioId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["usuarios", "{{usuarioId}}"]
+        },
+        "description": "Consulta o usuário criado no CT02 e valida seus dados."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('CT04 - Status HTTP 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('CT04 - Dados do usuário conferidos', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body._id).to.eql(pm.environment.get('usuarioId'));",
+              "    pm.expect(body.nome).to.eql(pm.environment.get('nomeUsuario'));",
+              "    pm.expect(body.email).to.eql(pm.environment.get('emailUsuario'));",
+              "    pm.expect(body.administrador).to.eql('false');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "CT05 - Atualizar usuário",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Usuario QA Atualizado\",\n  \"email\": \"{{emailUsuario}}\",\n  \"password\": \"{{senhaUsuario}}\",\n  \"administrador\": \"false\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/usuarios/{{usuarioId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["usuarios", "{{usuarioId}}"]
+        },
+        "description": "Atualiza o nome do usuário cadastrado."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('CT05 - Status HTTP 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('CT05 - Mensagem de atualização', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.message).to.eql('Registro alterado com sucesso');",
+              "    pm.environment.set('nomeUsuario', 'Usuario QA Atualizado');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "CT06 - Validar atualização do usuário",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/usuarios/{{usuarioId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["usuarios", "{{usuarioId}}"]
+        },
+        "description": "Confirma que os dados do usuário foram atualizados."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('CT06 - Status HTTP 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('CT06 - Nome e e-mail atualizados', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.nome).to.eql('Usuario QA Atualizado');",
+              "    pm.expect(body.email).to.eql(pm.environment.get('emailUsuario'));",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "CT07 - Excluir usuário",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/usuarios/{{usuarioId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["usuarios", "{{usuarioId}}"]
+        },
+        "description": "Exclui o usuário criado durante a execução."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('CT07 - Status HTTP 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('CT07 - Mensagem de exclusão', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.message).to.eql('Registro excluído com sucesso');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "CT08 - Validar exclusão do usuário",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/usuarios/{{usuarioId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["usuarios", "{{usuarioId}}"]
+        },
+        "description": "Confirma que o usuário excluído não pode mais ser encontrado."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('CT08 - Usuário não encontrado', function () {",
+              "    pm.response.to.have.status(400);",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.message).to.eql('Usuário não encontrado');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": []
+    }
+  ]
+}

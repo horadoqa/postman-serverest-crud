@@ -1,0 +1,3382 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-y: scroll;">
+<head>
+  <meta charset="UTF-8">
+  <title>Newman Summary Report</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+
+<style>
+code.renderMarkdown table, code.renderMarkdown th, code.renderMarkdown td {
+    border: 1px solid black;
+    width: max-content;
+    padding: .75rem;
+}
+
+.theme-dark {
+    --background-color: #222;
+    --bg-card-deck: #444444;
+    --text-color: #ccd2d8;
+    --tab-border: solid 1px #444;
+    --success: #3c9372;
+    --failure: #c24a3f;
+    --warning: #d28c23;
+    --info: #4083b6;
+    --badge-outline: #3c9372;
+    --badge-bg: #cdd3db;
+    --badge-text: #ccd2d9;
+    --failure-row: #c24a3f;
+    --warning-row: #d28c23;
+    --card-bg: #444;
+    --card-footer: #4f5758;
+    --form-input: #ececb5;
+    --hov-text: #d2dae5;
+    --h4-text: #ccd1d9;
+}
+
+.theme-light {
+    --tab-border: solid 1px #fff;
+    --text-color: #000000;
+    --success: #42a745;
+    --failure: #dc3544;
+    --warning: #f4c10b;
+    --info: #49a1b8;
+    --badge-outline: #040411;
+    --badge-bg: #f8f9fa;
+    --badge-text: #fff;
+    --failure-row: #f5c6cb;
+    --warning-row: #ffeeba;
+    --card-bg: #f7f7f7;
+    --hov-text: #fff;
+    --h4-text: #ffffff;
+}
+
+body {
+  padding-top:30px;
+  background-color: var(--background-color)!important;
+  color: var(--text-color);
+}
+
+#execution-data {
+  padding: 10px;
+  border: var(--tab-border);
+  border-top: none;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+  height: 105px;
+  overflow-y: auto;
+}
+
+body.theme-dark .card-header {
+    background-color: #444;
+}
+
+body.theme-light .card-header {
+    background-color: #f7f7f7;
+}
+
+.card-footer {
+    padding: .75rem 1.25rem;
+    background-color: var(--card-footer);
+}
+
+.card-deck {
+    background-color: var(--bg-card-deck)!important;
+}
+.form-control {
+    background: var(--form-input);
+}
+
+.custom-tab {
+  padding: 10px 15px;
+  margin-right: 0px;
+  height: 47px;
+  width: 69px;
+  text-align: center;
+  border: var(--tab-border);
+  border-bottom: none;
+  cursor:pointer;
+}
+
+body.theme-dark .text-white {
+    color: #ccd2d9!important;
+}
+h4 {
+    color: var(--h4-text);
+}
+
+body.theme-dark h1 {
+    color: #ccd2da;
+}
+
+body.theme-dark .bg-light>td {
+    background: #4f5858!important;
+}
+
+body.theme-dark .hljs {
+    background: #0a0a0ab0!important;
+    color: #8d8787!important;
+}
+
+.bg-info {
+    background-color: var(--info)!important;
+}
+.bg-success {
+    background-color: var(--success)!important;
+}
+
+.alert-success {
+    background-color: var(--success)!important;
+}
+
+.alert-warning {
+    background-color: var(--warning)!important;
+}
+
+.alert-info {
+    background-color: var(--info)!important;
+}
+
+.bg-warning {
+    background-color: var(--warning)!important;
+}
+
+.badge-warning {
+    color: var(--badge-text)!important;
+    background-color: var(--warning)!important;
+}
+
+.table-warning>td {
+    background-color: var(--warning-row);
+}
+
+.alert-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .alert-dark {
+    background-color: #636467!important;
+}
+
+body.theme-dark .text-dark {
+    color: #d1dae4!important;
+}
+
+body.theme-dark .badge-light {
+    color: #212529;
+    background-color: #cdd3db;
+}
+
+body.theme-light .badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+body.theme-light .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.table-danger>td {
+    background-color: var(--failure-row);
+}
+
+body.theme-dark .table .thead-light th {
+    background-color: #4f5858!important;
+    border-color: #dee2e6!important;
+    color: #ccd2d8!important;
+}
+
+.itPassed {
+  background: var(--success);
+  color: white;
+}
+.itFailed {
+  background: var(--failure);
+  color: white;
+}
+
+.resultsInfoPass {
+  color: var(--success);
+  padding-top: 4px;
+}
+
+.resultsInfoFail {
+  color: var(--failure);
+  padding-top: 4px;
+}
+
+.badge-outline-success {
+  color: var(--success);
+  border: 1px solid var(--success);
+  background-color: transparent;
+}
+
+.badge-outline {
+  color: var(--badge-outline);
+  border: 1px solid var(--badge-outline);
+  background-color: transparent;
+}
+
+.btn-outline-success {
+    color: var(--success)!important;
+    border-color: var(--success)!important;
+}
+
+.backToTop:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-success:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-secondary {
+  background-color: var(--success)!important;
+  color: var(--hov-text)!important;
+}
+
+body.theme-dark .env-heading {
+    color: #ccd2d9!important;
+}
+
+body, html {
+  height:100%;
+}
+
+.card {
+  overflow:hidden;
+}
+
+body.theme-dark .card-body {
+    background-color: #444;
+}
+
+body.theme-light .card-body {
+    background-color: #f7f7f7;
+}
+
+body.theme-dark .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-light .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.card-body .rotate {
+  z-index: 8;
+  float: right;
+  height: 100%;
+}
+
+.card-body .rotate i {
+  color: #14141426;
+  position: absolute;
+  left: 0;
+  left: auto;
+  right: -10px;
+  bottom: 0;
+  display: block;
+  -webkit-transform: rotate(-44deg);
+  -moz-transform: rotate(-44deg);
+  -o-transform: rotate(-44deg);
+  -ms-transform: rotate(-44deg);
+  transform: rotate(-44deg);
+}
+
+.dyn-height {
+  max-height:350px;
+  overflow-y:auto;
+}
+
+.nav-pills .nav-link.active {
+  background-color: transparent!important;
+}
+
+.backToTop {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 99;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
+
+.single-line-tabs {
+  padding-top: 10px;
+  height: 60px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 0px;
+  bottom: 4px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  box-shadow: 0 0px 15px #2020203d;
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input:checked + .slider {
+  background-color: #4083b6;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4083b6;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+table.dataTable td, table.dataTable tr {
+    vertical-align: middle;
+}
+
+body.theme-dark code {
+    color: #ccd2d8!important;
+}
+
+body.theme-light code {
+    color: #000000!important;
+}
+
+.text-wrap {
+    word-wrap: break-word; 
+    min-width: 600px; 
+    max-width: 600px; 
+    white-space: normal;
+}
+
+</style>
+</head>
+<body class="theme-dark">
+<script>
+    function setTheme(themeName) {
+        localStorage.setItem('theme', themeName);
+        document.body.className = themeName;
+    }
+
+    function toggleTheme() {
+        if (localStorage.getItem('theme') === 'theme-light') {
+            setTheme('theme-dark');
+        } else {
+            setTheme('theme-light');
+        }
+    }
+</script>
+  <div class="container">
+        <div class="container">
+            <label>Light</label>
+            <label id="switch" class="switch">
+                <input type="checkbox" onchange="toggleTheme()" id="slider">
+                <span class="slider round"></span>
+            </label>
+            <label>Dark</label>
+        </div>
+        <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item bg-info active" data-toggle="tooltip" title="Click to view the Summary">
+                <a class="nav-link text-white" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+            </li>
+            <li class="nav-item bg-success" data-toggle="tooltip" title="Click to view the Requests">
+                <a class="nav-link text-white" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Total Requests <span class="badge badge-light">7</span></a>
+            </li>
+            <li class="nav-item bg-danger" data-toggle="tooltip" title="Click to view the Failed Tests">
+                <a class="nav-link text-white" id="pills-failed-tab" data-toggle="pill" href="#pills-failed" role="tab" aria-controls="pills-failed" aria-selected="false">Failed Tests <span class="badge badge-light">0</span></a>
+            </li>
+            <li class="nav-item bg-warning" data-toggle="tooltip" title="Click to view the Skipped Tests">
+                <a class="nav-link text-white" id="pills-skipped-tab" data-toggle="pill" href="#pills-skipped" role="tab" aria-controls="pills-skipped" aria-selected="false">Skipped Tests <span class="badge badge-light">0</span></a>
+            </li>
+            </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-summary" role="tabcard" aria-labelledby="pills-summary-tab">
+<div class="row">
+  <div class="col-md-9 col-lg-12 main">
+   <h1 class="display-2 text-center">Newman Run Dashboard</h1>
+   <h5 class="text-center">Friday, 23 October 2026 12:17:15</h5>
+   <div class="row">
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-success">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-retweet fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Iterations</h6>
+       <h1 class="display-1">1</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-danger">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-list fa-4x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Assertions</h6>
+       <h1 class="display-1">13</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-info">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-plus-circle fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Failed Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-warning">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-share fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Skipped Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+   </div>
+   <hr>
+    <div class="row">
+    <div class="col">
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">File Information</h5>
+                <span><i class="fas fa-file-code"></i></span><strong> Collection:</strong> ServeRest CRUD - Usuários<br>
+                
+                <span><i class="fas fa-file-code"></i></span><strong> Environment:</strong> ServeRest - QA<br>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">Collection Description</h5>
+                <div class="dyn-height">
+                    <code class="renderMarkdown">Automação de testes de API da ServeRest com Postman. Contém os cenários CT01 a CT08 para cadastro, consulta, atualização e exclusão de usuários. O CT01 é validado junto ao CT02.</code>
+                </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">Timings and Data</h5>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Total run duration:</strong> 2.8s<br>
+                <span><i class="fas fa-database"></i></span><strong> Total data received:</strong> 15.59KB<br>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Average response time:</strong> 374ms<br>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-inverse">
+                    <tr class="text-center">
+                        <th class="text-uppercase">Summary Item</th>
+                        <th class="text-uppercase">Total</th>
+                        <th class="text-uppercase">Failed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Requests</td>
+                        <td class="text-center">7</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Prerequest Scripts</td>
+                        <td class="text-center">1</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Test Scripts</td>
+                        <td class="text-center">7</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Assertions</td>
+                        <td class="text-center">13</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Skipped Tests</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">-</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    <hr>
+   </div>
+   </div>
+  </div>
+ </div>
+        </div>
+            <div class="tab-pane fade" id="pills-failed" role="tabcard" aria-labelledby="pills-failed-tab">
+                <button id="topOfFailuresScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                     <br><br><h1 class="text-center">There are no failed tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-skipped" role="tabcard" aria-labelledby="pills-skipped-tab">
+                <button id="topOfSkippedScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                    <br><br><h1 class="text-center">There are no skipped tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-requests" role="tabcard" aria-labelledby="pills-requests-tab">
+
+            <button id="topOfRequestsScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+            <div class="btn-group float-right" role="group" aria-label="Button Group">
+                <button id="openAll" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Folders</button>
+                <button id="openAllRequests" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Requests</button>
+            </div>
+
+    <div class="text-uppercase" id="execution-menu">
+        <h5>1 Iteration available to view</h5>
+        
+        <nav class="table-responsive">
+        <ul class="nav single-line-tabs" id="iterationList">
+        </ul>
+        </nav>
+    </div>
+    <h6 class="text-uppercase text-muted" id="iterationSelected" style="padding-top: 10px;"></h6>
+	<div class="tab-content" id="execution-data">
+            <div id="folder-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15" aria-expanded="false" aria-controls="collapse" id="requests-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15" class="collapsed text-white z-block">
+                    Iteration: 1 - CT02 - Cadastrar usuário <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15" class="collapse" aria-labelledby="requests-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                        <div class="dyn-height">
+                                            <code class="renderMarkdown">CT01: valida o status HTTP e CT02: cadastra um usuário e armazena o ID retornado.</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> POST</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://serverest.dev/usuarios" target="_blank">https://serverest.dev/usuarios</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 201 - Created</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 759ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 82B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Type</td>
+                                                        <td class="text-wrap">application/json</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">d83550aa-dab2-4bae-84a4-8a4a522a0e48</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">serverest.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Length</td>
+                                                        <td class="text-wrap">140</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                        <div class="dyn-height">
+                                            <pre><code id="copyReqText-0" class="prettyPrint">{
+          &quot;nome&quot;: &quot;Usuario QA Postman&quot;,
+          &quot;email&quot;: &quot;qa.postman.1792768633119@example.com&quot;,
+          &quot;password&quot;: &quot;Teste@123&quot;,
+          &quot;administrador&quot;: &quot;false&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyReqText-0">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">access-control-allow-origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-dns-prefetch-control</td>
+                                                    <td class="text-wrap">off</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-frame-options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">strict-transport-security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15552000; includeSubDomains</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-download-options</td>
+                                                    <td class="text-wrap">noopen</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-content-type-options</td>
+                                                    <td class="text-wrap">nosniff</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-xss-protection</td>
+                                                    <td class="text-wrap">1; mode&#x3D;block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">content-type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-cloud-trace-context</td>
+                                                    <td class="text-wrap">9d82e93e2f31a363308f5f115ffea5da;o&#x3D;1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">date</td>
+                                                    <td class="text-wrap">Fri, 23 Oct 2026 15:19:22 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">server</td>
+                                                    <td class="text-wrap">Google Frontend</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">82</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-4a1bfaab-a035-4cb1-b9c4-168a824a8bd5" class="prettyPrint">{
+            &quot;message&quot;: &quot;Cadastro realizado com sucesso&quot;,
+            &quot;_id&quot;: &quot;VFqnsc8u6PTYAznL&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-4a1bfaab-a035-4cb1-b9c4-168a824a8bd5">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >CT01 - Status HTTP 201</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >CT02 - Mensagem de cadastro e ID retornado</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">2</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c" aria-expanded="false" aria-controls="collapse" id="requests-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c" class="collapsed text-white z-block">
+                    Iteration: 1 - CT03 - Consultar usuários <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c" class="collapse" aria-labelledby="requests-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                        <div class="dyn-height">
+                                            <code class="renderMarkdown">Consulta a lista de usuários cadastrados.</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://serverest.dev/usuarios" target="_blank">https://serverest.dev/usuarios</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 377ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 15.02KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">3625bde3-4b88-4103-a36a-80d6128d9b6c</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">serverest.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">access-control-allow-origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-dns-prefetch-control</td>
+                                                    <td class="text-wrap">off</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-frame-options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">strict-transport-security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15552000; includeSubDomains</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-download-options</td>
+                                                    <td class="text-wrap">noopen</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-content-type-options</td>
+                                                    <td class="text-wrap">nosniff</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-xss-protection</td>
+                                                    <td class="text-wrap">1; mode&#x3D;block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">content-type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-cloud-trace-context</td>
+                                                    <td class="text-wrap">ed545f794ac6ebf8308f5f115ffea995</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">date</td>
+                                                    <td class="text-wrap">Fri, 23 Oct 2026 15:19:22 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">server</td>
+                                                    <td class="text-wrap">Google Frontend</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">15376</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-6b18ce3b-9e05-4ba3-a24a-c418b72482ec" class="prettyPrint">{
+            &quot;quantidade&quot;: 68,
+            &quot;usuarios&quot;: [
+                {
+                    &quot;nome&quot;: &quot;Nome Atualizado&quot;,
+                    &quot;email&quot;: &quot;userteste_829471@qa.com&quot;,
+                    &quot;password&quot;: &quot;pwd_829471&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;01h8DaVfqOQSAEgq&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Cristopher Roberts&quot;,
+                    &quot;email&quot;: &quot;Maegan51@gmail.com&quot;,
+                    &quot;password&quot;: &quot;L8BumCKsBeAkgDe&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;06Ec3EhCfFfo1pyf&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Cliente Teste&quot;,
+                    &quot;email&quot;: &quot;qa.903c8a48-9974-46e2-942e-d6c6a06ab2e1@example.com&quot;,
+                    &quot;password&quot;: &quot;Teste@12345&quot;,
+                    &quot;administrador&quot;: &quot;false&quot;,
+                    &quot;_id&quot;: &quot;0bOrmeQHfntvAjYg&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Erna Halvorson&quot;,
+                    &quot;email&quot;: &quot;Miracle68@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;y5rqpvypgh1ee4C&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;18TG69r9HZilOiid&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Kaylin O&#x27;Keefe DDS&quot;,
+                    &quot;email&quot;: &quot;Jill.Koelpin45@gmail.com&quot;,
+                    &quot;password&quot;: &quot;EypRkrsNeu06qbv&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;31lVGPR4r6U1VkTR&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Sergio Runolfsson&quot;,
+                    &quot;email&quot;: &quot;Samson_McClure@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;pI6fd6lRhA8BSeU&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;3rZI6Qim2wt6LeeX&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Leonardo Teixeira&quot;,
+                    &quot;email&quot;: &quot;leonardo.teixeira@qa.com.br&quot;,
+                    &quot;password&quot;: &quot;teixeira$123&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;4019Jds7ZUBD6i6h&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Esta Prosacco&quot;,
+                    &quot;email&quot;: &quot;Myrtie.Ziemann96@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;gZgvH_wboBwQKRA&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;4e7wwJpAwChYvpxF&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Avery Bartoletti-Lesch&quot;,
+                    &quot;email&quot;: &quot;Elmore_Shields67@gmail.com&quot;,
+                    &quot;password&quot;: &quot;nRDNwvTeAMp7sVl&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;6OChsjlzq9C3et3m&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Branson Hilll&quot;,
+                    &quot;email&quot;: &quot;Sheila_Botsford68@gmail.com&quot;,
+                    &quot;password&quot;: &quot;p_Td6C4Aew0BJul&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;7dDgNuq2NKKFXpyT&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;QA Tester Auto&quot;,
+                    &quot;email&quot;: &quot;qa.test.56601@teste.com&quot;,
+                    &quot;password&quot;: &quot;teste&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;8DlOBIayfLwFHLwl&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Usuario QA API&quot;,
+                    &quot;email&quot;: &quot;qa.1792762127795@teste.com&quot;,
+                    &quot;password&quot;: &quot;TesteAmbev123!&quot;,
+                    &quot;administrador&quot;: &quot;false&quot;,
+                    &quot;_id&quot;: &quot;8SxbonIvk1p0WwSs&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Conrad Flatley&quot;,
+                    &quot;email&quot;: &quot;Lauryn.Lang@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;YfNyp_rH&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;9zQDpbiTc1LBKGBG&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Geraldine Goldner&quot;,
+                    &quot;email&quot;: &quot;Chasity.Kertzmann@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;TNTP4uiE&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;ANFysMsxjskQ120q&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Kenny Spencer&quot;,
+                    &quot;email&quot;: &quot;Dominique71@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;YieiEbKurAJHUaj&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;C3ntmLXPgnCGeIHW&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Hugh Stark&quot;,
+                    &quot;email&quot;: &quot;Guy.Roob@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;C1oAVnlrFZHbc2e&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;CCeiHwP2sF7D3w8S&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Ruth Zboncak&quot;,
+                    &quot;email&quot;: &quot;Audie_McClure20@gmail.com&quot;,
+                    &quot;password&quot;: &quot;nS2nBkR4lQru3LE&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;CORckaN3y7iJSuEp&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Mr. Geovany Purdy&quot;,
+                    &quot;email&quot;: &quot;Randy_Willms55@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;AwIR01Kn7klbQ28&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;CQ0ZRgsySuzrBLS8&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Elbert Keebler&quot;,
+                    &quot;email&quot;: &quot;Ezra97@gmail.com&quot;,
+                    &quot;password&quot;: &quot;BBYjEpL1&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;CVWIqKujA7VawAbO&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Alivia Borer&quot;,
+                    &quot;email&quot;: &quot;Ford42@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;QEVlpT_lrjCfeQF&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;DYdMoQn5kVj0pe2y&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Dina Luettgen&quot;,
+                    &quot;email&quot;: &quot;Daisy.Buckridge@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;gyL8LMlKREihDml&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;FJrTxEK84UGTnHvy&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Noble Haag&quot;,
+                    &quot;email&quot;: &quot;Aaron.Larson@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;2eBVNK0HkHbCFDT&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;GB6CSQaLamLhAKtT&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Favian Dibbert&quot;,
+                    &quot;email&quot;: &quot;Destany3@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;lnSCYCvW_08sBTV&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;H8XpQqpGHfGNbPcw&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Usuario QA API&quot;,
+                    &quot;email&quot;: &quot;qa.1792761457667@teste.com&quot;,
+                    &quot;password&quot;: &quot;TesteAmbev123!&quot;,
+                    &quot;administrador&quot;: &quot;false&quot;,
+                    &quot;_id&quot;: &quot;HKtk40dLoUnXBGDC&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Laila Rogahn&quot;,
+                    &quot;email&quot;: &quot;Emely47@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;aUa2IPr4zCy2495&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;Ibis9es5YeMMcS5F&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Usuario QA API&quot;,
+                    &quot;email&quot;: &quot;qa.1792761381095@teste.com&quot;,
+                    &quot;password&quot;: &quot;TesteAmbev123!&quot;,
+                    &quot;administrador&quot;: &quot;false&quot;,
+                    &quot;_id&quot;: &quot;J5i8J9oQ9SBqpMow&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Aluno Treinamento&quot;,
+                    &quot;email&quot;: &quot;teste_adm_1792767105781@teste.com&quot;,
+                    &quot;password&quot;: &quot;Teste123@&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;JTVpcdidyV64Sp5z&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Meire Lima&quot;,
+                    &quot;email&quot;: &quot;mirella.limeira@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;Senha@123&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;KZs6VG9B5uFMLefM&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Lucas&quot;,
+                    &quot;email&quot;: &quot;lucas.ferraz@gmail.com&quot;,
+                    &quot;password&quot;: &quot;123teste&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;Kp0a6QQMDlU6cZDU&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Ebony Ebert&quot;,
+                    &quot;email&quot;: &quot;Cleo79@gmail.com&quot;,
+                    &quot;password&quot;: &quot;ITiRLguX7saAsNN&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;M2qa5TCEwJ7Olk7f&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Ms. Bernadette Wunsch&quot;,
+                    &quot;email&quot;: &quot;Lenny.Reynolds@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;Yebhvf2JIPjiE0W&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;Q0TmepSDiaH3Buhf&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Usuario QA Postman&quot;,
+                    &quot;email&quot;: &quot;qa.postman.1792768633119@example.com&quot;,
+                    &quot;password&quot;: &quot;Teste@123&quot;,
+                    &quot;administrador&quot;: &quot;false&quot;,
+                    &quot;_id&quot;: &quot;VFqnsc8u6PTYAznL&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Aluno Treinamento&quot;,
+                    &quot;email&quot;: &quot;teste_login_adm_1792767122334@teste.com&quot;,
+                    &quot;password&quot;: &quot;Teste123@&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;WEXwj0SFx0ULY8ML&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Orlando Schoen MD&quot;,
+                    &quot;email&quot;: &quot;Jennifer.Prohaska97@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;ICSAIEaW&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;XeXmIQLX4h9rSVdq&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Theodora Frami&quot;,
+                    &quot;email&quot;: &quot;Elian91@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;u_hku_pcDzzJYpc&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;Yv850CCBQCpmu4aR&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;QA Esteira TECLADO_MEC&quot;,
+                    &quot;email&quot;: &quot;qa.mvkrh5qr1@esteira.dev&quot;,
+                    &quot;password&quot;: &quot;Qa#n8kmmjj4x9&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;ZSr3EPS7xPHqOXNI&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Aluno Teste&quot;,
+                    &quot;email&quot;: &quot;teste_node_1792767045758@teste.com&quot;,
+                    &quot;password&quot;: &quot;Teste123@&quot;,
+                    &quot;administrador&quot;: &quot;false&quot;,
+                    &quot;_id&quot;: &quot;bmjAukfz5lF9ovyY&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Bryon Deckow&quot;,
+                    &quot;email&quot;: &quot;Angus89@gmail.com&quot;,
+                    &quot;password&quot;: &quot;yQ235iHr5CFwVom&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;bu1jaO1CHuQq7qpg&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;QA Esteira FONE_BT&quot;,
+                    &quot;email&quot;: &quot;qa.mvkrh5b30@esteira.dev&quot;,
+                    &quot;password&quot;: &quot;Qa#epvbqoqsx9&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;dixrIW98TiAiEJpx&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Josefina Berge-Braun&quot;,
+                    &quot;email&quot;: &quot;Haven.Muller94@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;IZXXjdPyTX828IE&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;fam9sU8KaK5GbHjG&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Ona Huels&quot;,
+                    &quot;email&quot;: &quot;Nicholas_Pagac@gmail.com&quot;,
+                    &quot;password&quot;: &quot;QBsfmpYWZcwWZtN&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;g1KzcNZw63ciTXMD&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Aluno Treinamento&quot;,
+                    &quot;email&quot;: &quot;qa_aluno_1792767156655@teste.com&quot;,
+                    &quot;password&quot;: &quot;Teste123@&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;gIljNgZGN1Nvlv24&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Laura Ferreira&quot;,
+                    &quot;email&quot;: &quot;laura.ferreira@qa.com.br&quot;,
+                    &quot;password&quot;: &quot;ferreira$123&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;hM5zrqK1PmxgOZZB&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Salvador Morar III&quot;,
+                    &quot;email&quot;: &quot;Keshaun.Dicki26@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;RdEsVOmvcL70r6e&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;jLZb1d6hBwoFDIvR&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Garland Gleichner MD&quot;,
+                    &quot;email&quot;: &quot;Ryann_Swift1@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;Ur7kLxZXhc7m5w8&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;lCovpfCXiQwqDuQ2&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;QA User 9914&quot;,
+                    &quot;email&quot;: &quot;qa.user.9914@mail.com&quot;,
+                    &quot;password&quot;: &quot;Teste@123&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;lMhuVzfI4oRdbG9C&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Domenick Ruecker&quot;,
+                    &quot;email&quot;: &quot;Violette94@gmail.com&quot;,
+                    &quot;password&quot;: &quot;debiurQ0FkFHisT&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;lMlzn4IttjS1ZSiT&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Jovany Wiegand&quot;,
+                    &quot;email&quot;: &quot;Nedra.Hilpert-Grimes@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;5G3vineqX5pNqwX&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;n0xwqWG4hqIJ3Zrm&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Lucasds&quot;,
+                    &quot;email&quot;: &quot;lucas1.ferraz@gmail.com&quot;,
+                    &quot;password&quot;: &quot;123restedsd&quot;,
+                    &quot;administrador&quot;: &quot;false&quot;,
+                    &quot;_id&quot;: &quot;oXLo0ROStai6VrSe&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Lennie Graham-Lind&quot;,
+                    &quot;email&quot;: &quot;Ari59@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;QtAeotM7MLcxjIU&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;oauyoTgpsawOOymF&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Phoebe Hammes&quot;,
+                    &quot;email&quot;: &quot;Carlos82@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;NwNwoj3wst3ngc4&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;owFU1M9nN3s5l9YB&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Titus Rice&quot;,
+                    &quot;email&quot;: &quot;Brown.McDermott@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;6EGNJV5V0wcWA7s&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;q5UK8tJNtJq5u6dv&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Mr. Emile West II&quot;,
+                    &quot;email&quot;: &quot;Glenda39@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;7G951uNDmNkvbGq&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;qQpkXOtmG7AeCg0L&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Nikki Cummerata-MacGyver&quot;,
+                    &quot;email&quot;: &quot;Alexys24@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;oCzThKmMjevQ8Dv&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;qS2axonD6yFg74Wb&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Lupe Mueller&quot;,
+                    &quot;email&quot;: &quot;Amira.Jaskolski@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;KG_TcMXQdhRgbyX&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;qVNKycIbvuYeE2sq&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;QA Esteira MONITOR_27&quot;,
+                    &quot;email&quot;: &quot;qa.mvkrh60o2@esteira.dev&quot;,
+                    &quot;password&quot;: &quot;Qa#bhrnyi4nx9&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;qsLv9hE7HtVuu9U0&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Shawn Flatley&quot;,
+                    &quot;email&quot;: &quot;Marcelino67@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;gqEkrt5KEufLnYC&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;qxgWniapJ29fqkF0&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;QA User 5697&quot;,
+                    &quot;email&quot;: &quot;qa.user.5697@mail.com&quot;,
+                    &quot;password&quot;: &quot;Teste@123&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;r5YuQjJOJYQrrPAl&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Aluno Treinamento&quot;,
+                    &quot;email&quot;: &quot;qa_aluno_1792767055755@teste.com&quot;,
+                    &quot;password&quot;: &quot;Teste123@&quot;,
+                    &quot;administrador&quot;: &quot;false&quot;,
+                    &quot;_id&quot;: &quot;rU3jFyVSjcxJmSi4&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Bernard Turcotte PhD&quot;,
+                    &quot;email&quot;: &quot;Colten.Sipes10@gmail.com&quot;,
+                    &quot;password&quot;: &quot;GRlsja_IYNXbKvD&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;tJkiyL5KfUasjL5n&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Flora Kemmer&quot;,
+                    &quot;email&quot;: &quot;Kaylin.Botsford91@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;Hvv2E_OipI7nxF3&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;vk7uhKX6bSJtIoPm&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Fulano da Silva&quot;,
+                    &quot;email&quot;: &quot;fulano@qa.com&quot;,
+                    &quot;password&quot;: &quot;teste&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;vmOquCVulfipHMWl&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Ms. Maida Lang DVM&quot;,
+                    &quot;email&quot;: &quot;Dejah10@gmail.com&quot;,
+                    &quot;password&quot;: &quot;F3C1JkARYmL52gp&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;vnYt3u1Q5a2ImAlQ&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Ms. Garnet Friesen&quot;,
+                    &quot;email&quot;: &quot;Hassie.Jacobi2@gmail.com&quot;,
+                    &quot;password&quot;: &quot;3B7CosceDiWGFBb&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;xCAR5Wjo31YLD4kb&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Darron Bechtelar&quot;,
+                    &quot;email&quot;: &quot;Christy11@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;bXJ1dH5oCm3gWrj&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;yas2DmUgdxmlQ5bz&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Ryley Lehner-Lockman&quot;,
+                    &quot;email&quot;: &quot;Geoffrey.Will@gmail.com&quot;,
+                    &quot;password&quot;: &quot;auModsrsQrbpklD&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;zBSmTB59KgxTlWJD&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Miss Matilde Heller-Cronin Sr.&quot;,
+                    &quot;email&quot;: &quot;Lee_Labadie19@hotmail.com&quot;,
+                    &quot;password&quot;: &quot;a7v1diEiJpb6F7z&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;zkE4nC6Re59Byi3W&quot;
+                },
+                {
+                    &quot;nome&quot;: &quot;Nikki Vandervort&quot;,
+                    &quot;email&quot;: &quot;Jeffry.Kuhn@yahoo.com&quot;,
+                    &quot;password&quot;: &quot;dssii97SUCUe9n6&quot;,
+                    &quot;administrador&quot;: &quot;true&quot;,
+                    &quot;_id&quot;: &quot;zqbltTXUDmoa6mDn&quot;
+                }
+            ]
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-6b18ce3b-9e05-4ba3-a24a-c418b72482ec">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >CT03 - Status HTTP 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >CT03 - Lista de usuários retornada</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">2</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-316c7408-297c-4852-97d2-f45454097c7d" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-316c7408-297c-4852-97d2-f45454097c7d" aria-expanded="false" aria-controls="collapse" id="requests-316c7408-297c-4852-97d2-f45454097c7d" class="collapsed text-white z-block">
+                    Iteration: 1 - CT04 - Consultar usuário cadastrado <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-316c7408-297c-4852-97d2-f45454097c7d" class="collapse" aria-labelledby="requests-316c7408-297c-4852-97d2-f45454097c7d">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                        <div class="dyn-height">
+                                            <code class="renderMarkdown">Consulta o usuário criado no CT02 e valida seus dados.</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://serverest.dev/usuarios/VFqnsc8u6PTYAznL" target="_blank">https://serverest.dev/usuarios/VFqnsc8u6PTYAznL</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 302ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 179B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">9ba9ae95-de6b-4f65-9e30-8ac0a53c6a3d</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">serverest.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">access-control-allow-origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-dns-prefetch-control</td>
+                                                    <td class="text-wrap">off</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-frame-options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">strict-transport-security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15552000; includeSubDomains</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-download-options</td>
+                                                    <td class="text-wrap">noopen</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-content-type-options</td>
+                                                    <td class="text-wrap">nosniff</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-xss-protection</td>
+                                                    <td class="text-wrap">1; mode&#x3D;block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">content-type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-cloud-trace-context</td>
+                                                    <td class="text-wrap">f00a33b297fb88d7308f5f115ffea3f8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">date</td>
+                                                    <td class="text-wrap">Fri, 23 Oct 2026 15:19:22 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">server</td>
+                                                    <td class="text-wrap">Google Frontend</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">179</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-5be99a75-451e-4c64-96e7-3cf7050786ac" class="prettyPrint">{
+            &quot;nome&quot;: &quot;Usuario QA Postman&quot;,
+            &quot;email&quot;: &quot;qa.postman.1792768633119@example.com&quot;,
+            &quot;password&quot;: &quot;Teste@123&quot;,
+            &quot;administrador&quot;: &quot;false&quot;,
+            &quot;_id&quot;: &quot;VFqnsc8u6PTYAznL&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-5be99a75-451e-4c64-96e7-3cf7050786ac">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >CT04 - Status HTTP 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >CT04 - Dados do usuário conferidos</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">2</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-f7b9f15d-1044-4767-a0d4-4862045b4a5c" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c" aria-expanded="false" aria-controls="collapse" id="requests-f7b9f15d-1044-4767-a0d4-4862045b4a5c" class="collapsed text-white z-block">
+                    Iteration: 1 - CT05 - Atualizar usuário <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c" class="collapse" aria-labelledby="requests-f7b9f15d-1044-4767-a0d4-4862045b4a5c">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                        <div class="dyn-height">
+                                            <code class="renderMarkdown">Atualiza o nome do usuário cadastrado.</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> PUT</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://serverest.dev/usuarios/VFqnsc8u6PTYAznL" target="_blank">https://serverest.dev/usuarios/VFqnsc8u6PTYAznL</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 300ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 50B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Type</td>
+                                                        <td class="text-wrap">application/json</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">f4ccc5b0-90ae-4e96-92e8-6cda00d880d4</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">serverest.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Length</td>
+                                                        <td class="text-wrap">143</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                        <div class="dyn-height">
+                                            <pre><code id="copyReqText-3" class="prettyPrint">{
+          &quot;nome&quot;: &quot;Usuario QA Atualizado&quot;,
+          &quot;email&quot;: &quot;qa.postman.1792768633119@example.com&quot;,
+          &quot;password&quot;: &quot;Teste@123&quot;,
+          &quot;administrador&quot;: &quot;false&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyReqText-3">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">access-control-allow-origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-dns-prefetch-control</td>
+                                                    <td class="text-wrap">off</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-frame-options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">strict-transport-security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15552000; includeSubDomains</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-download-options</td>
+                                                    <td class="text-wrap">noopen</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-content-type-options</td>
+                                                    <td class="text-wrap">nosniff</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-xss-protection</td>
+                                                    <td class="text-wrap">1; mode&#x3D;block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">content-type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-cloud-trace-context</td>
+                                                    <td class="text-wrap">d514e235d0358f72308f5f115ffea8de</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">date</td>
+                                                    <td class="text-wrap">Fri, 23 Oct 2026 15:19:23 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">server</td>
+                                                    <td class="text-wrap">Google Frontend</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">50</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-f65a134e-bfc4-4c84-b055-d93b80cfd243" class="prettyPrint">{
+            &quot;message&quot;: &quot;Registro alterado com sucesso&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-f65a134e-bfc4-4c84-b055-d93b80cfd243">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >CT05 - Status HTTP 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >CT05 - Mensagem de atualização</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">2</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-a48e7788-daca-4b3e-804a-8e9d967b19f4" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4" aria-expanded="false" aria-controls="collapse" id="requests-a48e7788-daca-4b3e-804a-8e9d967b19f4" class="collapsed text-white z-block">
+                    Iteration: 1 - CT06 - Validar atualização do usuário <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4" class="collapse" aria-labelledby="requests-a48e7788-daca-4b3e-804a-8e9d967b19f4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                        <div class="dyn-height">
+                                            <code class="renderMarkdown">Confirma que os dados do usuário foram atualizados.</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://serverest.dev/usuarios/VFqnsc8u6PTYAznL" target="_blank">https://serverest.dev/usuarios/VFqnsc8u6PTYAznL</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 293ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 182B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">46104f45-262a-4be5-b8b0-6f2b60fc7803</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">serverest.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">access-control-allow-origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-dns-prefetch-control</td>
+                                                    <td class="text-wrap">off</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-frame-options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">strict-transport-security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15552000; includeSubDomains</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-download-options</td>
+                                                    <td class="text-wrap">noopen</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-content-type-options</td>
+                                                    <td class="text-wrap">nosniff</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-xss-protection</td>
+                                                    <td class="text-wrap">1; mode&#x3D;block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">content-type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-cloud-trace-context</td>
+                                                    <td class="text-wrap">3950530a35592d0f308f5f115ffeaa43</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">date</td>
+                                                    <td class="text-wrap">Fri, 23 Oct 2026 15:19:23 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">server</td>
+                                                    <td class="text-wrap">Google Frontend</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">182</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-c40c880f-bba1-444e-b2fe-b09df0ad0062" class="prettyPrint">{
+            &quot;nome&quot;: &quot;Usuario QA Atualizado&quot;,
+            &quot;email&quot;: &quot;qa.postman.1792768633119@example.com&quot;,
+            &quot;password&quot;: &quot;Teste@123&quot;,
+            &quot;administrador&quot;: &quot;false&quot;,
+            &quot;_id&quot;: &quot;VFqnsc8u6PTYAznL&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-c40c880f-bba1-444e-b2fe-b09df0ad0062">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >CT06 - Status HTTP 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >CT06 - Nome e e-mail atualizados</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">2</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-715e9e54-5a57-4872-a9c4-58e1694b3fee" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee" aria-expanded="false" aria-controls="collapse" id="requests-715e9e54-5a57-4872-a9c4-58e1694b3fee" class="collapsed text-white z-block">
+                    Iteration: 1 - CT07 - Excluir usuário <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee" class="collapse" aria-labelledby="requests-715e9e54-5a57-4872-a9c4-58e1694b3fee">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                        <div class="dyn-height">
+                                            <code class="renderMarkdown">Exclui o usuário criado durante a execução.</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> DELETE</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://serverest.dev/usuarios/VFqnsc8u6PTYAznL" target="_blank">https://serverest.dev/usuarios/VFqnsc8u6PTYAznL</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 297ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 51B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">deed511a-c670-49d4-b1bd-955da5f42ba8</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">serverest.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">access-control-allow-origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-dns-prefetch-control</td>
+                                                    <td class="text-wrap">off</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-frame-options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">strict-transport-security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15552000; includeSubDomains</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-download-options</td>
+                                                    <td class="text-wrap">noopen</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-content-type-options</td>
+                                                    <td class="text-wrap">nosniff</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-xss-protection</td>
+                                                    <td class="text-wrap">1; mode&#x3D;block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">content-type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-cloud-trace-context</td>
+                                                    <td class="text-wrap">4944c5560fc7d0e2308f5f115ffea55a</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">date</td>
+                                                    <td class="text-wrap">Fri, 23 Oct 2026 15:19:23 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">server</td>
+                                                    <td class="text-wrap">Google Frontend</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">51</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-6929d7f9-e435-49ce-ae0b-65f74553e428" class="prettyPrint">{
+            &quot;message&quot;: &quot;Registro excluído com sucesso&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-6929d7f9-e435-49ce-ae0b-65f74553e428">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >CT07 - Status HTTP 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >CT07 - Mensagem de exclusão</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">2</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-a99152c5-9283-43fe-97b4-8ff08d4d7aa4" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4" aria-expanded="false" aria-controls="collapse" id="requests-a99152c5-9283-43fe-97b4-8ff08d4d7aa4" class="collapsed text-white z-block">
+                    Iteration: 1 - CT08 - Validar exclusão do usuário <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4" class="collapse" aria-labelledby="requests-a99152c5-9283-43fe-97b4-8ff08d4d7aa4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                        <div class="dyn-height">
+                                            <code class="renderMarkdown">Confirma que o usuário excluído não pode mais ser encontrado.</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://serverest.dev/usuarios/VFqnsc8u6PTYAznL" target="_blank">https://serverest.dev/usuarios/VFqnsc8u6PTYAznL</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 400 - Bad Request</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 295ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 45B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">7276e1db-6391-468b-8a63-b9efcd0a4c61</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">serverest.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">access-control-allow-origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-dns-prefetch-control</td>
+                                                    <td class="text-wrap">off</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-frame-options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">strict-transport-security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15552000; includeSubDomains</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-download-options</td>
+                                                    <td class="text-wrap">noopen</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-content-type-options</td>
+                                                    <td class="text-wrap">nosniff</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-xss-protection</td>
+                                                    <td class="text-wrap">1; mode&#x3D;block</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">content-type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">x-cloud-trace-context</td>
+                                                    <td class="text-wrap">5fccb5946cfa631b308f5f115ffeae1b</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">date</td>
+                                                    <td class="text-wrap">Fri, 23 Oct 2026 15:19:24 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">server</td>
+                                                    <td class="text-wrap">Google Frontend</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">45</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-6297610f-cd74-48e4-bb6a-d5d4ab568e46" class="prettyPrint">{
+            &quot;message&quot;: &quot;Usuário não encontrado&quot;
+        }</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-6297610f-cd74-48e4-bb6a-d5d4ab568e46">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >CT08 - Usuário não encontrado</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- Set slider initial position depending on the localstorage state -->
+
+<script>
+(function () {
+  var sliderChecked = true;
+  if (localStorage.getItem('theme') === 'theme-light') {
+    setTheme('theme-light');
+    sliderChecked = false;
+  } else {
+    setTheme('theme-dark');
+    sliderChecked = true;
+  }
+  $(document).ready( function () {
+    document.getElementById('slider').checked = sliderChecked;
+  });
+})();
+</script>
+
+<!-- Data Table Configuration -->
+
+<script>
+$(document).ready( function () {
+    $('.datatable').DataTable({
+        "retrieve": true,
+        "paging": false,
+        "info": false,
+        "fixedColumns":   {
+            "heightMatch": 'none'
+        }
+    });
+});
+</script>
+
+<!-- Tooltip Configuration -->
+
+<script>
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger : 'hover'
+    })
+})
+</script>
+
+<!-- Show/Hide The Folders -->
+
+<script>
+$('#openAll').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#folder-7d31e7c0-5c2f-4c7b-9d10-1c3a5b7e9f20-iteration-0').removeClass('collapsed')
+            $('#folder-collapse-7d31e7c0-5c2f-4c7b-9d10-1c3a5b7e9f20-iteration-0').addClass('show')
+        $('#openAll').html("Collapse Folders");
+        break;
+    case 2:
+            $('#folder-7d31e7c0-5c2f-4c7b-9d10-1c3a5b7e9f20-iteration-0').addClass('collapsed')
+            $('#folder-collapse-7d31e7c0-5c2f-4c7b-9d10-1c3a5b7e9f20-iteration-0').removeClass('show')
+        $('#openAll').html("Expand Folders");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Requests -->
+
+<script>
+$('#openAllRequests').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#requests-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').removeClass('collapsed')
+            $('#collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').removeClass('collapsed')
+            $('#requests-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').addClass('show')
+            $('#collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').addClass('show')
+            $('#requests-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').removeClass('collapsed')
+            $('#collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').removeClass('collapsed')
+            $('#requests-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').addClass('show')
+            $('#collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').addClass('show')
+            $('#requests-316c7408-297c-4852-97d2-f45454097c7d').removeClass('collapsed')
+            $('#collapse-316c7408-297c-4852-97d2-f45454097c7d').removeClass('collapsed')
+            $('#requests-316c7408-297c-4852-97d2-f45454097c7d').addClass('show')
+            $('#collapse-316c7408-297c-4852-97d2-f45454097c7d').addClass('show')
+            $('#requests-f7b9f15d-1044-4767-a0d4-4862045b4a5c').removeClass('collapsed')
+            $('#collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c').removeClass('collapsed')
+            $('#requests-f7b9f15d-1044-4767-a0d4-4862045b4a5c').addClass('show')
+            $('#collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c').addClass('show')
+            $('#requests-a48e7788-daca-4b3e-804a-8e9d967b19f4').removeClass('collapsed')
+            $('#collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4').removeClass('collapsed')
+            $('#requests-a48e7788-daca-4b3e-804a-8e9d967b19f4').addClass('show')
+            $('#collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4').addClass('show')
+            $('#requests-715e9e54-5a57-4872-a9c4-58e1694b3fee').removeClass('collapsed')
+            $('#collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee').removeClass('collapsed')
+            $('#requests-715e9e54-5a57-4872-a9c4-58e1694b3fee').addClass('show')
+            $('#collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee').addClass('show')
+            $('#requests-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').removeClass('collapsed')
+            $('#collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').removeClass('collapsed')
+            $('#requests-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').addClass('show')
+            $('#collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').addClass('show')
+        $('#openAllRequests').html("Collapse Requests");
+        break;
+    case 2:
+            $('#requests-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').addClass('collapsed')
+            $('#collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').addClass('collapsed')
+            $('#requests-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').removeClass('show')
+            $('#collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').removeClass('show')
+            $('#requests-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').addClass('collapsed')
+            $('#collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').addClass('collapsed')
+            $('#requests-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').removeClass('show')
+            $('#collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').removeClass('show')
+            $('#requests-316c7408-297c-4852-97d2-f45454097c7d').addClass('collapsed')
+            $('#collapse-316c7408-297c-4852-97d2-f45454097c7d').addClass('collapsed')
+            $('#requests-316c7408-297c-4852-97d2-f45454097c7d').removeClass('show')
+            $('#collapse-316c7408-297c-4852-97d2-f45454097c7d').removeClass('show')
+            $('#requests-f7b9f15d-1044-4767-a0d4-4862045b4a5c').addClass('collapsed')
+            $('#collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c').addClass('collapsed')
+            $('#requests-f7b9f15d-1044-4767-a0d4-4862045b4a5c').removeClass('show')
+            $('#collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c').removeClass('show')
+            $('#requests-a48e7788-daca-4b3e-804a-8e9d967b19f4').addClass('collapsed')
+            $('#collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4').addClass('collapsed')
+            $('#requests-a48e7788-daca-4b3e-804a-8e9d967b19f4').removeClass('show')
+            $('#collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4').removeClass('show')
+            $('#requests-715e9e54-5a57-4872-a9c4-58e1694b3fee').addClass('collapsed')
+            $('#collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee').addClass('collapsed')
+            $('#requests-715e9e54-5a57-4872-a9c4-58e1694b3fee').removeClass('show')
+            $('#collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee').removeClass('show')
+            $('#requests-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').addClass('collapsed')
+            $('#collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').addClass('collapsed')
+            $('#requests-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').removeClass('show')
+            $('#collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').removeClass('show')
+        $('#openAllRequests').html("Expand Requests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Skipped Tests -->
+
+<script>
+$('#openAllSkipped').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#skipped-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').removeClass('collapsed')
+            $('#skipped-collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').removeClass('collapsed')
+            $('#skipped-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').addClass('show')
+            $('#skipped-collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').addClass('show')
+            $('#skipped-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').removeClass('collapsed')
+            $('#skipped-collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').removeClass('collapsed')
+            $('#skipped-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').addClass('show')
+            $('#skipped-collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').addClass('show')
+            $('#skipped-316c7408-297c-4852-97d2-f45454097c7d').removeClass('collapsed')
+            $('#skipped-collapse-316c7408-297c-4852-97d2-f45454097c7d').removeClass('collapsed')
+            $('#skipped-316c7408-297c-4852-97d2-f45454097c7d').addClass('show')
+            $('#skipped-collapse-316c7408-297c-4852-97d2-f45454097c7d').addClass('show')
+            $('#skipped-f7b9f15d-1044-4767-a0d4-4862045b4a5c').removeClass('collapsed')
+            $('#skipped-collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c').removeClass('collapsed')
+            $('#skipped-f7b9f15d-1044-4767-a0d4-4862045b4a5c').addClass('show')
+            $('#skipped-collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c').addClass('show')
+            $('#skipped-a48e7788-daca-4b3e-804a-8e9d967b19f4').removeClass('collapsed')
+            $('#skipped-collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4').removeClass('collapsed')
+            $('#skipped-a48e7788-daca-4b3e-804a-8e9d967b19f4').addClass('show')
+            $('#skipped-collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4').addClass('show')
+            $('#skipped-715e9e54-5a57-4872-a9c4-58e1694b3fee').removeClass('collapsed')
+            $('#skipped-collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee').removeClass('collapsed')
+            $('#skipped-715e9e54-5a57-4872-a9c4-58e1694b3fee').addClass('show')
+            $('#skipped-collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee').addClass('show')
+            $('#skipped-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').removeClass('collapsed')
+            $('#skipped-collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').removeClass('collapsed')
+            $('#skipped-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').addClass('show')
+            $('#skipped-collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').addClass('show')
+        $('#openAllSkipped').html("Collapse All Skipped Tests");
+        break;
+    case 2:
+            $('#skipped-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').addClass('collapsed')
+            $('#skipped-collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').addClass('collapsed')
+            $('#skipped-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').removeClass('show')
+            $('#skipped-collapse-526f3d20-b8d2-4f6a-98d8-72ee76dcbc15').removeClass('show')
+            $('#skipped-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').addClass('collapsed')
+            $('#skipped-collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').addClass('collapsed')
+            $('#skipped-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').removeClass('show')
+            $('#skipped-collapse-c807f6b0-8cf7-4a13-8b4d-c016c69e0b9c').removeClass('show')
+            $('#skipped-316c7408-297c-4852-97d2-f45454097c7d').addClass('collapsed')
+            $('#skipped-collapse-316c7408-297c-4852-97d2-f45454097c7d').addClass('collapsed')
+            $('#skipped-316c7408-297c-4852-97d2-f45454097c7d').removeClass('show')
+            $('#skipped-collapse-316c7408-297c-4852-97d2-f45454097c7d').removeClass('show')
+            $('#skipped-f7b9f15d-1044-4767-a0d4-4862045b4a5c').addClass('collapsed')
+            $('#skipped-collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c').addClass('collapsed')
+            $('#skipped-f7b9f15d-1044-4767-a0d4-4862045b4a5c').removeClass('show')
+            $('#skipped-collapse-f7b9f15d-1044-4767-a0d4-4862045b4a5c').removeClass('show')
+            $('#skipped-a48e7788-daca-4b3e-804a-8e9d967b19f4').addClass('collapsed')
+            $('#skipped-collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4').addClass('collapsed')
+            $('#skipped-a48e7788-daca-4b3e-804a-8e9d967b19f4').removeClass('show')
+            $('#skipped-collapse-a48e7788-daca-4b3e-804a-8e9d967b19f4').removeClass('show')
+            $('#skipped-715e9e54-5a57-4872-a9c4-58e1694b3fee').addClass('collapsed')
+            $('#skipped-collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee').addClass('collapsed')
+            $('#skipped-715e9e54-5a57-4872-a9c4-58e1694b3fee').removeClass('show')
+            $('#skipped-collapse-715e9e54-5a57-4872-a9c4-58e1694b3fee').removeClass('show')
+            $('#skipped-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').addClass('collapsed')
+            $('#skipped-collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').addClass('collapsed')
+            $('#skipped-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').removeClass('show')
+            $('#skipped-collapse-a99152c5-9283-43fe-97b4-8ff08d4d7aa4').removeClass('show')
+        $('#openAllSkipped').html("Expand All Skipped Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Failures -->
+
+<script>
+$('#openAllFailed').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+let failedItemContent
+let failedItemHeading
+switch (clickCount){
+    case 1:
+        $('#openAllFailed').html("Collapse All Failed Tests");
+        break;
+    case 2:
+        $('#openAllFailed').html("Expand All Failed Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Pretty Print the Response Body-->
+
+<script>
+function isJSON(data)
+{
+    var ret = true;
+    try {
+            JSON.parse(data);
+    }catch(e) {
+            ret = false;
+    }
+    return ret;
+}
+
+function isXML(data)
+{
+    return (data.length > 0 && data[0] === '<');
+}
+
+// see https://gist.github.com/sente/1083506/d2834134cd070dbcc08bf42ee27dabb746a1c54d#gistcomment-2254622
+function formatXML(data) {
+    const PADDING = ' '.repeat(2); // set desired indent size here
+    const reg = /(>)(<)(\/*)/g;
+    let pad = 0;
+    xml = data.replace(reg, '$1\r\n$2$3');
+
+    return xml.split('\r\n').map((node, index) => {
+        let indent = 0;
+        if (node.match(/.+<\/\w[^>]*>$/)) {
+            indent = 0;
+        } else if (node.match(/^<\/\w/) && pad > 0) {
+            pad -= 1;
+        } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+            indent = 1;
+        } else {
+            indent = 0;
+        }
+
+        pad += indent;
+        return PADDING.repeat(pad - indent) + node;
+    }).join('\r\n');
+}
+
+$(".prettyPrint").each(function () {
+        var data = $(this).text();
+        // Verify whether data is JSON
+        if(isJSON(data))
+        {
+                obj = JSON.parse(data);
+                data = JSON.stringify(obj, null, 2);
+        }
+        else if(isXML(data)) {
+            data = formatXML(data);
+        }
+        $(this).text(data);
+});
+</script>
+
+
+<!-- Copy Response Body To Clipboard -->
+
+<script>
+    var clipboard = new ClipboardJS('.copyButton');
+
+    clipboard.on('success', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-success text-white")
+        e.trigger.textContent = '✔ Copied!';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-success text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+    clipboard.on('error', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-danger text-white")
+        e.trigger.textContent = '✗ Not Copied';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-danger text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+
+</script>
+
+<!-- Render the Description Markdown and link in the test failures -->
+
+<script>
+    const remarkable = new Remarkable();
+
+    const descriptions = document.querySelectorAll(".renderMarkdown");
+    descriptions.forEach(description => {
+        description.innerHTML = renderHtmlFromMarkdown(description.textContent);
+    });
+    function renderHtmlFromMarkdown(markdown) {
+        return remarkable.render(trim(markdown));
+    }
+    function trim(string) {
+        return string ? string.replace(/^ +| +$/gm, "") : string;
+    }
+</script>
+
+<!-- Show/Hide The Toggles When Scrolling The Page -->
+
+<script>
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("topOfRequestsScreen").style.display = "block";
+    document.getElementById("topOfFailuresScreen").style.display = "block";
+    document.getElementById("topOfSkippedScreen").style.display = "block";
+    document.getElementById("openAll").style.display = "none";
+    document.getElementById("openAllRequests").style.display = "none";
+
+
+  } else {
+    document.getElementById("topOfRequestsScreen").style.display = "none";
+    document.getElementById("topOfFailuresScreen").style.display = "none";
+    document.getElementById("topOfSkippedScreen").style.display = "none";
+    document.getElementById("openAll").style.display = "block";
+    document.getElementById("openAllRequests").style.display = "block";
+
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+<!-- Creates The Iteration Tabs -->
+
+<script type="text/javascript">
+    "use strict";
+
+window.onload = function () {
+
+  // set display for all blocks of response
+  var allItems = document.querySelectorAll('[class*=iteration-]');
+  allItems.forEach(function(elem){
+    elem.style.display = 'block';
+  });
+
+   
+  let totalIterations = 1;
+   
+
+  let menu = document.querySelector('#execution-menu .nav');
+
+  for(var i = 0; i < totalIterations; i++)
+  {
+    let li = document.createElement('li');
+    li.appendChild(document.createTextNode((i + 1)));
+    li.setAttribute('id', 'iteration-' + i);
+    li.classList.add("custom-tab");
+    li.classList.add("itPassed");
+
+    li.addEventListener('click', function() {
+      //set display to none for all except row
+      let allItems = document.querySelectorAll('[class*=iteration-]:not(.row)');
+      allItems.forEach(function(elem) {
+        elem.style.display = 'none';
+      })
+
+      let allMenus = document.querySelectorAll('[id*=iteration-]');
+      allMenus.forEach(function(elem){
+        elem.style.borderBottom = 'none';
+      })
+
+      this.style.borderBottom = 'solid 3px #032a33';
+
+      let items = document.querySelectorAll("." + this.id + ':not(.row)');
+      items.forEach(function(elem) {
+        elem.style.display = elem.style.display == 'block' ? 'none' : 'block';
+      })
+    });
+    menu.appendChild(li);
+  }
+
+  //shows first tab data
+  document.getElementById('iteration-0').click();
+  document.getElementById('iterationSelected').innerHTML = `Iteration ${document.getElementById('iteration-0').innerHTML} selected`
+
+}
+</script>
+
+<!-- Create the Selected Iteration Label -->
+
+<script>
+$(document).ready(function(){
+    $(function() {
+        $("#iterationList li").click(function() {
+            document.getElementById('iterationSelected').innerHTML = "Iteration " + this.innerHTML + " selected"
+        });
+    });
+});
+</script>
+
+<!-- Filter Action for the Iterations -->
+
+<script>
+$("#filterInput").on("input paste", function() {
+    var value = $(this).val();
+    $("#iterationList li").filter(function() {
+	    $("#showOnlyFailures").data("clickCount") ? $("#showOnlyFailures").click():null;
+        $(this).toggle($(this).text().indexOf(value) > -1)
+    });
+});
+</script>
+
+<!-- Showing the Failed Interations -->
+
+<script>
+$('#showOnlyFailures').on('click', function(e) {
+    let clickCount = $(this).data("clickCount") || 1
+	$("#filterInput").val()!="" && clickCount==1 ? $("#filterInput").val('').trigger('input'): null;
+    let selectedIteration = $('#iterationList li').filter(function () {
+        return $(this).css('border-bottom').indexOf("solid") > -1 && $(this).hasClass('itFailed');
+    });
+    selectedIteration.length || clickCount > 1 ? null : $("#iterationList li.itFailed")[0].click()
+    $("#iterationList li.itPassed").toggle()
+    $("div.bg-success [id*=requests]").parents('[class^="row iteration-"]').toggle();
+    clickCount = clickCount > 1 ? 1 : ++clickCount;
+    clickCount > 1 ? $("#showOnlyFailures").html("Show All Iterations") : $("#showOnlyFailures").html("Show Failed Iterations");
+    $(this).data("clickCount", clickCount)
+})
+</script>
+</body>
+</html>
