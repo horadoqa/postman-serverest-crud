@@ -23,7 +23,23 @@ Verificar se o arquivo 'JSON' está correto:
 node -e "JSON.parse(require('fs').readFileSync('collections/ServeRest-CRUD.postman_collection.json', 'utf8')); console.log('JSON válido')"
 ```
 
-Se quiser executar a Collection fora da interface gráfica, exporte a Collection e o Environment como arquivos JSON e use o Newman:
+Se quiser executar a Collection fora da interface gráfica, exporte a Collection e o Environment como arquivos JSON 
+
+### Utilizando o Postaman CLI
+
+Instale:
+
+```bash
+npm install -g postman-cli
+```
+
+Execute
+
+```bash
+postman collection run collections/ServeRest-CRUD.postman_collection.json -e environments/ServeRest-QA.postman_environment.json
+```
+
+### Utilizando o Newman:
 
 Instale o 'NEWMAN':
 
